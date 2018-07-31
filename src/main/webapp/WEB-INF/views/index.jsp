@@ -8,17 +8,39 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="./resources/js/functions.js"></script>
 <script>
+$(function(){
+	$('input[id=endt]').click(function(){
 
+		var ischecked = $('input:checkbox[id=endt]').is(':checked')
+			if(ischecked){
+				$('#endf').append('<span id="endff">End time <input type="datetime-local" name="end_time" value="${day}T${time}" min="${day}T${time}" max="2099-12-31T00:00"/></span>');
+			}else{
+				$('#endff').remove();
+			}
+	});
+	
+	
+	$('input[id=priv]').click(function(){
+
+		var ischecked = $('input:checkbox[id=priv]').is(':checked')
+			if(ischecked){
+				$('#private_type').val('Y');
+			}else{
+				$('#private_type').val('N');
+			}
+	});
+	
+});
 </script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>fucking vote page</title>
+<title>Vote People</title>
 </head>
 <body>
 
 <!-------------------------------- header ---------------------------------->
 	<header>
 			<div class="container container-full">
-				<a id="logo" href="./"><img src="./resources/image/pie-chart-small.png" height="30" style="vertical-align: middle; margin-right: 8px;" alt="strawpoll.com logo" role="banner" /><span>strawpoll</span></a>
+				<a id="logo" href="./"><img src="./resources/image/pie-chart-small.png" height="30" style="vertical-align: middle; margin-right: 8px;" role="banner" /><span>strawpoll</span></a>
 			</div>
 	</header>
 
@@ -37,23 +59,35 @@
                     <h2 class="center">New Poll</h2>
                     <div class="box-title">
                         <div class="input-wrapper">
-                            <input id="newq" name="question" class="title" type="text" placeholder="Type your question here..." />
+                            <input id="newq" name="title" class="title" type="text" placeholder="Type your question here..." />
                         </div>
                     </div>
                     <div class="box-content">
                         <div class="poll-answers">
-                            <div class="answer"><span class="count">1.</span> <input id="a0" name="a0" value="" placeholder="poll option..."/></div>
-                            <div class="answer"><span class="count">2.</span> <input id="a1" name="a1" placeholder="poll option..."/></div>
-                            <div class="answer"><span class="count">3.</span> <input name="a2" placeholder="poll option..."/></div>
+                            <div class="answer"><span class="count">1.</span> <input id="a0" name="item" placeholder="poll option..."/></div>
+                            <div class="answer"><span class="count">2.</span> <input id="a1" name="item" placeholder="poll option..."/></div>
+                            <div class="answer"><span class="count">3.</span> <input name="item" placeholder="poll option..."/></div>
+                        </div>
+                        
+                        <div class="poll-options" id="endf">
                         </div>
 
                         <div class="poll-options">
                             <div class="checkbox checkbox-danger">
+                            	<input type="hidden" id="private_type" name="private_type" value="N"/>
                                 <input type="checkbox" id="priv" name="priv" class="styled">
                                 <label for="priv">
-                                    Private (only via direct link)
+                                    Private (only direct link)
                                 </label>
                             </div>
+                            
+                            <div class="checkbox">
+                                <input type="checkbox" id="endt" name="endt" class="styled">
+                                <label for="endt">
+                                    End Time
+                                </label>
+                            </div>
+                            
                             
                         </div>
           
