@@ -1,11 +1,9 @@
 package com.strawpoll.app;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Locale;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +16,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class HomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home() {
+	public String home(Model model) {
 	
+		Date date = new Date();
+		
+		SimpleDateFormat day = new SimpleDateFormat("yyyy-MM-dd");
+	    SimpleDateFormat time = new SimpleDateFormat("HH:mm");
+
+		model.addAttribute("day", day.format(date) );
+		model.addAttribute("time", time.format(date) );
+		
 		return "index";
 	}
 	

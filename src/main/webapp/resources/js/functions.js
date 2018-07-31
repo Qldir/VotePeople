@@ -10,13 +10,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 $(document).ready(function () {
-	
+
 	var aid = 2;
 	
 	//answer class 마지막 부분 focus시 poll option 한줄 더 추가
 	$('body').on('focus', '.answer:last', function() {
 		aid++;
-		$('.poll-answers').append($('<div><span class="count">'+(aid+1)+'.</span> <input name="a'+aid+'" placeholder="'+poll_option+'..." /></div>').addClass('answer').hide().fadeIn(1000));
+		$('.poll-answers').append($('<div><span class="count">'+(aid+1)+'.</span> <input name="item" placeholder="'+poll_option+'..." /></div>').addClass('answer').hide().fadeIn(1000));
     });
     
     $('#newaction').on('click', function(event) {
