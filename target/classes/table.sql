@@ -9,7 +9,7 @@ CREATE TABLE poll_info(
 	start_time DATE DEFAULT SYSDATE,
 	end_time DATE,
 	all_vote_count NUMBER DEFAULT 0,
-	private VARCHAR(2) DEFAULT 'N'
+	private_type VARCHAR(2) DEFAULT 'N'
 )
 
 ------ poll_info_table sequence ------

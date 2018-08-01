@@ -26,7 +26,7 @@ public class HomeController {
 		model.addAttribute("day", day.format(date) );
 		model.addAttribute("time", time.format(date) );
 		
-		return "poll";
+		return "index";
 	}
 	
 }
