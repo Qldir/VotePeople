@@ -9,6 +9,7 @@ import com.strawpoll.app.dao.PollItemRepository;
 import com.strawpoll.app.dao.PollRepository;
 import com.strawpoll.app.dto.Item;
 import com.strawpoll.app.dto.PollInfo;
+import com.strawpoll.app.dto.PollItem;
 
 @Controller
 public class PollController {
@@ -22,11 +23,25 @@ public class PollController {
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
 	public String newpoll(PollInfo pInfo, Item item) {
 	
-		System.out.println(pInfo);
-		System.out.println(item);
+		String end_time = pInfo.getEnd_time().replace('T', ' ');
 		
-		pollRepository.insertPoll(pInfo);
+		pInfo.setEnd_time(end_time);
 		
+		pollRepository.insertPoll(pInfo);	//insert Poll_Info
+		
+		int poll_id = pollRepository.selectId();	//Poll_Info_id
+		
+		PollItem pItem = new PollItem();	//Poll_Item create
+		
+		pItem.setPoll_id(poll_id);	//set Poll_Info_id
+
+		for(String data:item.getItem()) {
+			if(!(data.equals("") || data.isEmpty() ) ) {
+				
+				pItem.setItem(data);
+				itemRepository.insertItem(pItem);
+			}
+		}
 		
 		return "redirect:/";
 	}
