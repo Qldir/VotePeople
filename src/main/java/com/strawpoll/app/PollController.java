@@ -2,6 +2,7 @@ package com.strawpoll.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -43,6 +44,19 @@ public class PollController {
 			}
 		}
 		
-		return "redirect:/";
+		return "redirect:/"+poll_id;
 	}
+	
+	
+	@RequestMapping("/{poll_id}")
+	public String goPoll(@PathVariable int poll_id) {
+		
+		System.out.println(pollRepository.selectPoll(poll_id));
+		
+		System.out.println(itemRepository.selectItem(poll_id));
+		
+		return "poll"; 
+	}
+	
+	
 }

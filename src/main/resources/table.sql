@@ -1,3 +1,7 @@
+DROP SEQUENCE poll_info_seq
+DROP SEQUENCE poll_item_seq
+DROP SEQUENCE vote_list_seq
+
 ------ poll_info_table-------
 CREATE TABLE poll_info(
 	poll_id NUMBER PRIMARY KEY,

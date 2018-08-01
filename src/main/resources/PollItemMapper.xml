@@ -21,4 +21,16 @@
 	)
 </insert>
 
+<select id="selectItem" parameterType="Int" resultType="PollItem">
+	SELECT
+		id,
+		item,
+		vote_count
+	FROM
+		poll_item
+	WHERE
+		poll_id=#{poll_id}
+	ORDER BY id
+</select>
+
 </mapper>

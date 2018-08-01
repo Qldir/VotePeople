@@ -4,5 +4,6 @@ import com.strawpoll.app.dto.PollInfo;
 
 public interface PollMapper {
 	public int insertPoll(PollInfo pInfo);
+	public PollInfo selectPoll(int poll_id);
 	public int selectId();
 }
