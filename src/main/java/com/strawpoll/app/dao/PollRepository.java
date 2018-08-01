@@ -28,5 +28,13 @@ public class PollRepository implements PollMapper{
 		
 		return mapper.selectId();
 	}
+
+	@Override
+	public PollInfo selectPoll(int poll_id) {
+		
+		PollMapper mapper = session.getMapper(PollMapper.class);
+		
+		return mapper.selectPoll(poll_id);
+	}
 	
 }

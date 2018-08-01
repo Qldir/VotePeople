@@ -27,13 +27,25 @@
 	)
 </insert>
 
+<select id="selectPoll" parameterType="Int" resultType="PollInfo">
+	SELECT
+		title,
+		TO_CHAR(end_time,'YYYY-MM-DD HH24:MI') AS end_time,
+		all_vote_count,
+		private_type
+	FROM
+		poll_info
+	WHERE
+		poll_id=#{poll_id}
+</select>
+
 <select id="selectId" resultType="Int">
 	SELECT
 		poll_id
 	FROM
 		poll_info
 	WHERE
-		rownum = 1
+		<![CDATA[ ROWNUM = 1 ]]>
 	ORDER BY poll_id DESC
 </select>
 

@@ -4,6 +4,40 @@ var minoptions = 'Add at least two poll options...';
 var search = 'Search';
 var no_answer_selected = 'No answer selected.';
 
+//poll page에서 votebutton 클릭 시
+$('#votebutton').click(function() {
+	var pid = $("#pollid").attr("content");
+	var oids = new Array();
+	var selected = 0;
+	
+	$('.checkvote').each(function() {
+		if ($(this).prop('checked') == true) {
+			selected++;
+			oids.push($(this).attr("name"));
+		}
+	});
+	
+	if (selected == 0) {
+    	$('#voteresponse').html(no_answer_selected).addClass("error");
+    	return;
+	}
+	
+	var oidstring = oids.join("#");
+
+	$("#votebutton").attr("disabled", true);
+	
+	$.post("/vote", { pid: pid, oids: oidstring }).done(function(data) {
+		$("#votebutton").attr("disabled", false);
+		$('#voteresponse').html(data.message);
+		if (data.success) {
+    		refreshResults(1);
+    		displayResults();
+    		gtag('config', 'UA-91001217-1', { 'anonymize_ip': true, 'page_title' : 'Voted', 'page_path': '/'+$("#pollid").attr('content')+'/voted' });
+    	}
+	});
+});
+
+
 // 페이지 갱신 시 타이틀에 포커스
 document.addEventListener("DOMContentLoaded", function(event) {
     $('#newq').focus();
@@ -68,37 +102,6 @@ $(document).ready(function () {
     	displayResults();
     });
     
-    $('#votebutton').click(function() {
-    	var pid = $("#pollid").attr("content");
-    	var oids = new Array();
-    	var selected = 0;
-    	
-    	$('.checkvote').each(function() {
-    		if ($(this).prop('checked') == true) {
-    			selected++;
-    			oids.push($(this).attr("name"));
-    		}
-    	});
-    	
-    	if (selected == 0) {
-	    	$('#voteresponse').html(no_answer_selected).addClass("error");
-	    	return;
-    	}
-    	
-    	var oidstring = oids.join("#");
-
-    	$("#votebutton").attr("disabled", true);
-    	
-    	$.post("/vote", { pid: pid, oids: oidstring }).done(function(data) {
-    		$("#votebutton").attr("disabled", false);
-    		$('#voteresponse').html(data.message);
-    		if (data.success) {
-	    		refreshResults(1);
-	    		displayResults();
-	    		gtag('config', 'UA-91001217-1', { 'anonymize_ip': true, 'page_title' : 'Voted', 'page_path': '/'+$("#pollid").attr('content')+'/voted' });
-	    	}
-    	});
-    });
     
     var hash = window.location.hash;
     if (hash == "#r") {

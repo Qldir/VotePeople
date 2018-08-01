@@ -49,9 +49,13 @@ public class PollController {
 	
 	
 	@RequestMapping("/{poll_id}")
-	public String home(@PathVariable int poll_id) {
-		System.out.println(poll_id);
-		return "index"; 
+	public String goPoll(@PathVariable int poll_id) {
+		
+		System.out.println(pollRepository.selectPoll(poll_id));
+		
+		System.out.println(itemRepository.selectItem(poll_id));
+		
+		return "poll"; 
 	}
 	
 	
