@@ -3,39 +3,38 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!-- 회원 정보 SQL -->
+<!-- Poll Info SQL -->
 <mapper namespace="com.strawpoll.app.dao.PollMapper">
 
-<!-- 회원 정보 저장 -->
-<insert id="insertMember" parameterType="Member">
-	INSERT INTO shopmember
+<insert id="insertPoll" parameterType="PollInfo">
+	INSERT INTO poll_info
 	(
-		userid,
-		password,
-		username,
-		address,
-		phone
+		poll_id,
+		title,
+		<if test="end_time != null">
+		end_time,
+		</if>
+		private_type
 	)
 	VALUES
 	(
-		#{userid},
-		#{password},
-		#{username},
-		#{address},
-		#{phone}
+		poll_info_seq.nextVal,
+		#{title},
+		<if test="end_time != null">
+		to_date(#{end_time},'YYYY-MM-DD HH24:MI'),
+		</if>
+		#{private_type}
 	)
 </insert>
 
-<!-- login check -->
-<select id="login" parameterType="Member" resultType="Member">
+<select id="selectId" resultType="Int">
 	SELECT
-		userid,
-		username
+		poll_id
 	FROM
-		shopmember
+		poll_info
 	WHERE
-		userid = #{userid}
-	AND
-		password = #{password}
+		rownum = 1
+	ORDER BY poll_id DESC
 </select>
+
 </mapper>

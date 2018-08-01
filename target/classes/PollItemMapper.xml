@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Poll Item SQL -->
+<mapper namespace="com.strawpoll.app.dao.PollItemMapper">
+
+<insert id="insertItem" parameterType="PollItem">
+	INSERT INTO poll_item
+	(
+		id,
+		poll_id,
+		item
+	)
+	VALUES
+	(
+		poll_item_seq.nextVal,
+		#{poll_id},
+		#{item}
+	)
+</insert>
+
+</mapper>

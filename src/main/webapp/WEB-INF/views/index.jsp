@@ -25,6 +25,7 @@ $(function(){
 		var ischecked = $('input:checkbox[id=priv]').is(':checked')
 			if(ischecked){
 				$('#private_type').val('Y');
+				alert($('#private_type').val());
 			}else{
 				$('#private_type').val('N');
 			}
@@ -55,7 +56,7 @@ $(function(){
         <section class="content">
             <div class="container container-small box box-orange">
                 <div class="poll-wrapper">
-                    <form id="newpoll" action="/new" method="post">
+                    <form id="newpoll" action="new" method="post">
                     <h2 class="center">New Poll</h2>
                     <div class="box-title">
                         <div class="input-wrapper">

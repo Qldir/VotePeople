@@ -7,14 +7,14 @@
 
 	<!-- Java Class에 대한 alias 지정 -->
 	<typeAliases>
-		<typeAlias type="com.strawpoll.app.dto.PollInfo" alias="PoolInfo" />
-		<typeAlias type="com.strawpoll.app.dto.PollItem" alias="PoolItem" />
+		<typeAlias type="com.strawpoll.app.dto.PollInfo" alias="PollInfo" />
+		<typeAlias type="com.strawpoll.app.dto.PollItem" alias="PollItem" />
 	</typeAliases>
 	
 	<!-- Mapper 파일 include -->
 	<mappers>
 		<mapper resource="PollMapper.xml" />
-		<mapper resource="PollItem.xml" />
+		<mapper resource="PollItemMapper.xml" />
 	</mappers>
 	
 </configuration>

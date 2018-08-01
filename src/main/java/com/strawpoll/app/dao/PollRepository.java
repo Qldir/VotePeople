@@ -25,9 +25,8 @@ public class PollRepository implements PollMapper{
 	public int selectId() {
 		
 		PollMapper mapper = session.getMapper(PollMapper.class);
-		int result = mapper.selectId();
 		
-		return result;
+		return mapper.selectId();
 	}
 	
 }
