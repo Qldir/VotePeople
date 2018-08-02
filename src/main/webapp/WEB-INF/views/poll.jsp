@@ -42,7 +42,7 @@ $(function(){
 		<div class="poll-wrapper">
 			<div class="box-content">
 				<div class="center">
-					<h1 itemprop="name">ㅈㅂㄷㅂㅈ</h1>
+					<h1 itemprop="name">${pInfo.title}</h1>
 				</div>
 
 				<div class="hint">Choose one answer:</div>
@@ -53,35 +53,15 @@ $(function(){
 				
 				
 					
-					
+				<c:forEach items="${pItem}" var="item" varStatus="status">
 					<div class="radio">
-	                    <input type="radio" name="check20514086" id="check1" class="styled check checkvote">
-	                    <label for="check1">
-	                        ㅂㅈㄷㅂㅈ
-	                    </label>
+	                    <input type="radio" name="check${item.id}" id="check${status.count}" class="styled check checkvote">
+	                    <label for="check${status.count}">${item.item}</label>
 	                </div>
-					
+				</c:forEach>
 				
 					
-					
-					<div class="radio">
-	                    <input type="radio" name="check20514087" id="check2" class="styled check checkvote">
-	                    <label for="check2">
-	                        ㅂㅈㄷ
-	                    </label>
-	                </div>
-					
-				
-					
-					
-					<div class="radio">
-	                    <input type="radio" name="check20514088" id="check3" class="styled check checkvote">
-	                    <label for="check3">
-	                        ㅈㅂ
-	                    </label>
-	                </div>
-					
-				
+
 				</div>
 				<div class="poll-action">
 					<button class="action wide" id="votebutton">Vote</button>
@@ -107,7 +87,7 @@ $(function(){
 			<div class="row">
 				<div class="column full center">
 					<div class="sharelinkbox">
-						<a href="/c3kfpsf1" id="sharelink" onclick="return false;">https://strawpoll.com/c3kfpsf1</a>
+						<a href="/${poll_id}" id="sharelink" onclick="return false;">http://localhost:12376/app/${poll_id}</a>
 					</div>
 				</div>
 			</div>

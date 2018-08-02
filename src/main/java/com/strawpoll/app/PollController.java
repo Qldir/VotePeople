@@ -1,7 +1,10 @@
 package com.strawpoll.app;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,11 +52,14 @@ public class PollController {
 	
 	
 	@RequestMapping("/{poll_id}")
-	public String goPoll(@PathVariable int poll_id) {
+	public String goPoll(@PathVariable int poll_id, Model model) {
 		
-		System.out.println(pollRepository.selectPoll(poll_id));
+		PollInfo pInfo = pollRepository.selectPoll(poll_id);
 		
-		System.out.println(itemRepository.selectItem(poll_id));
+		ArrayList<PollItem> pItem = itemRepository.selectItem(poll_id);
+		
+		model.addAttribute("pInfo", pInfo);
+		model.addAttribute("pItem", pItem);
 		
 		return "poll"; 
 	}

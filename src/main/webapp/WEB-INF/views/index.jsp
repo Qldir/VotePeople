@@ -118,7 +118,7 @@ $(function(){
                                     <span class="hover">17776</span>
                                 </div>
                                 <div class="float-right text">
-                                    <h5><a href="/cxseg31f" title ="manakah yang Anda dukung ?">manakah yang Anda dukung ?</a></h5> 
+                                    <h5><a href="/" title ="manakah yang Anda dukung ?">manakah yang Anda dukung ?</a></h5> 
                                     <div class="font-medium font-gray">Created on 07/27/2018 at 10:37:24</div>
                                 </div>
                             </li>
