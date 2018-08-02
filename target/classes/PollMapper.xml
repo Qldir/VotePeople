@@ -14,7 +14,9 @@
 		<if test="end_time != null">
 		end_time,
 		</if>
+		<if test="private_type != null">
 		private_type
+		</if>
 	)
 	VALUES
 	(
@@ -23,7 +25,9 @@
 		<if test="end_time != null">
 		to_date(#{end_time},'YYYY-MM-DD HH24:MI'),
 		</if>
+		<if test="private_type != null">
 		#{private_type}
+		</if>
 	)
 </insert>
 

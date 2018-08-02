@@ -42,7 +42,7 @@ $(function(){
 		<div class="poll-wrapper">
 			<div class="box-content">
 				<div class="center">
-					<h1 itemprop="name">${pInfo.title}</h1>
+					<h1 itemprop="name">${pInfo.title} </h1>
 				</div>
 
 				<div class="hint">Choose one answer:</div>
