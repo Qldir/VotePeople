@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Poll Item SQL -->
+<mapper namespace="com.strawpoll.app.dao.VoteListMapper">
+
+<insert id="insertVote" parameterType="VoteList">
+	INSERT INTO vote_list
+	(
+		id,
+		poll_id,
+		client_ip
+	)
+	VALUES
+	(
+		vote_list_seq.nextVal,
+		#{poll_id},
+		#{client_ip}
+	)
+</insert>
+
+<select id="selectVote" parameterType="VoteList" resultType="VoteList">
+	SELECT
+		id,
+		poll_id,
+		client_ip
+	FROM
+		vote_list
+	WHERE
+		poll_id=#{poll_id}
+	AND
+		client_ip=#{client_ip}
+</select>
+
+</mapper>

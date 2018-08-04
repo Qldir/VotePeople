@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
 
@@ -111,17 +112,18 @@ $(function(){
                         <h2>Trending Polls</h2>
                         <ul class="polllist">
                         
-                        
+                        <c:forEach var="tranding" items="${trendingPoll}">
                             <li class="clearfix">
                                 <div class="float-left image">
                                     <img src="./resources/image/pie-chart-small.png" width="50" />
-                                    <span class="hover">17776</span>
+                                    <span class="hover">${tranding.all_vote_count}</span>
                                 </div>
                                 <div class="float-right text">
-                                    <h5><a href="/" title ="manakah yang Anda dukung ?">manakah yang Anda dukung ?</a></h5> 
-                                    <div class="font-medium font-gray">Created on 07/27/2018 at 10:37:24</div>
+                                    <h5><a href="./${tranding.poll_id}" title ="${tranding.title}">${tranding.title}</a></h5> 
+                                    <div class="font-medium font-gray">Created on ${tranding.end_time}</div>
                                 </div>
                             </li>
+                        </c:forEach>
                         
 
                         </ul>
@@ -130,16 +132,18 @@ $(function(){
                         <h2>New Polls</h2>
                         <ul class="polllist">
                               
+                        <c:forEach var="newpoll" items="${newPolls}">
                             <li class="clearfix">
                                 <div class="float-left image">
                                     <img src="./resources/image/pie-chart-small.png" width="50" />
-                                    <span class="hover">3</span>
+                                    <span class="hover">${newpoll.all_vote_count}</span>
                                 </div>
                                 <div class="float-right text">
-                                    <h5><a href="/565k5gz4" title ="Pilih pengurus plant 3 paling">Pilih pengurus plant 3 paling</a></h5> 
-                                    <div class="font-medium font-gray">Created on 07/30/2018 at 06:33:06</div>
+                                    <h5><a href="./${newpoll.poll_id}" title ="${newpoll.title}">${newpoll.title}</a></h5> 
+                                    <div class="font-medium font-gray">Created on ${newpoll.end_time}</div>
                                 </div>
                             </li>   
+                        </c:forEach>
                          
                         
                         </ul>

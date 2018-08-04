@@ -33,4 +33,14 @@
 	ORDER BY id
 </select>
 
+<update id="updateItem" parameterType="PollItem">
+	UPDATE poll_item
+	SET
+		vote_count=vote_count+1
+	WHERE
+		poll_id=#{poll_id}
+	AND
+		id=#{id}
+</update>
+
 </mapper>

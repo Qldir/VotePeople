@@ -53,4 +53,44 @@
 	ORDER BY poll_id DESC
 </select>
 
+<select id="trendingPoll" resultType="PollInfo">
+	SELECT
+		poll_id,
+		title,
+		to_char(start_time,'YYYY-MM-DD HH24:MI:SS') end_time,
+		all_vote_count
+	FROM
+		poll_info
+	WHERE
+		private_type='N'
+	AND
+		<![CDATA[ rownum <= 5 ]]>
+	ORDER BY all_vote_count DESC
+</select>
+
+<select id="newPolls" resultType="PollInfo">
+	SELECT
+		poll_id,
+		title,
+		to_char(start_time,'YYYY-MM-DD HH24:MI:SS') end_time,
+		all_vote_count
+	FROM
+		poll_info
+	WHERE
+		private_type='N'
+	AND
+		<![CDATA[ rownum <= 5 ]]>
+	ORDER BY start_time
+</select>
+
+
+
+<update id="updateCount" parameterType="Int">
+	UPDATE poll_info
+	SET
+		all_vote_count=all_vote_count+1
+	WHERE
+		poll_id=#{poll_id}
+</update>
+
 </mapper>

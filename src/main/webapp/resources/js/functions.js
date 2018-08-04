@@ -3,40 +3,8 @@ var poll_option = 'poll option';
 var minoptions = 'Add at least two poll options...';
 var search = 'Search';
 var no_answer_selected = 'No answer selected.';
-
-//poll page에서 votebutton 클릭 시
-$('#votebutton').click(function() {
-	var pid = $("#pollid").attr("content");
-	var oids = new Array();
-	var selected = 0;
-	
-	$('.checkvote').each(function() {
-		if ($(this).prop('checked') == true) {
-			selected++;
-			oids.push($(this).attr("name"));
-		}
-	});
-	
-	if (selected == 0) {
-    	$('#voteresponse').html(no_answer_selected).addClass("error");
-    	return;
-	}
-	
-	var oidstring = oids.join("#");
-
-	$("#votebutton").attr("disabled", true);
-	
-	$.post("/vote", { pid: pid, oids: oidstring }).done(function(data) {
-		$("#votebutton").attr("disabled", false);
-		$('#voteresponse').html(data.message);
-		if (data.success) {
-    		refreshResults(1);
-    		displayResults();
-    		gtag('config', 'UA-91001217-1', { 'anonymize_ip': true, 'page_title' : 'Voted', 'page_path': '/'+$("#pollid").attr('content')+'/voted' });
-    	}
-	});
-});
-
+var already_voted = 'Error: You already voted on this poll';
+var closed_vote = 'The Vote Is Over';
 
 // 페이지 갱신 시 타이틀에 포커스
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -44,7 +12,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 $(document).ready(function () {
-
+	
+	setInterval(function(){ refreshResults(); },1000);
+	
 	var aid = 2;
 	
 	//answer class 마지막 부분 focus시 poll option 한줄 더 추가
@@ -98,7 +68,7 @@ $(document).ready(function () {
     });
     
     $('#showresult').on('click', function() {
-    	refreshResults(1);
+    	refreshResults();
     	displayResults();
     });
     
@@ -112,14 +82,6 @@ $(document).ready(function () {
     	refreshResults(1);
     });
 
-	$('#commentbtn').click(function() {
-		var pid = $("#pollid").attr("content");
-		var text = $('#commenttxt').val();
-		
-		$.post("/comment", { pid: pid, text: text }).done(function(data) {
-	    	$('#commentrslt').html(data.message);
-	    });
-	});
 
 	$('#table-scroll-right').click(function() {
 		var leftPos = $('#main-table-wrap').scrollLeft();
@@ -131,94 +93,52 @@ $(document).ready(function () {
 		$('#main-table-wrap').animate({scrollLeft: leftPos - 900}, 'slow');
 	});
 	
-	$('.opinion-vote').click(function() {
-		var obj = $(this);
 
-		var pid = $(this).data('id');
-
-		var type = 'none';
+	//poll page에서 votebutton 클릭 시
+	$('#votebutton').on('click',function() {
+		var poll_id = $("#pollid").val();
+		var oid = '';
+		var selected = 0;
 		
-		if ($(this).hasClass('helpful')) {
-			type = 'helpful';
-		} else if ($(this).hasClass('like')) {
-			type = 'like';
-		} else if ($(this).hasClass('wow')) {
-			type = 'wow';
-		} else if ($(this).hasClass('thinking')) {
-			type = 'thinking';
-		} else if ($(this).hasClass('disappointed')) {
-			type = 'disappointed';
+		$('.checkvote').each(function() {
+			if ($(this).prop('checked') == true) {
+				selected++;
+				oid = $(this).attr("name");
+			}
+		});
+		
+		
+		if (selected == 0) {
+	    	$('#voteresponse').html(no_answer_selected).addClass("error");
+	    	return;
 		}
-			
-		$('#opinion-response').hide();
-
-		$.post("/opinion-vote", { pid: pid, type: type }).done(function(data) {
-			if (data.success) {
-    			$('#opinion-response').html('<div class="success">Thanks for your opinion!</div>');
-    			obj.find('.value').html(parseInt(obj.find('.value').html()) + 1);
-    		} else {
-    			$('#opinion-response').html('<div>Thanks, your opinion was already considered.</div>')
-    		}
-    		$('#opinion-response').show('slow');
-    	});
-	});
-
-	$('#vote-for').click(function() {
-		var pid = $(this).data('pid');
-		$.post("/guide-vote", { pid: pid, positive: 1 }).done(function(data) {
-			$('.thanks-response').html(data.message);
-    		$('.thanks-response').show('slow');
-    	});
-	});
-
-	$('#vote-against').click(function() {
-		var pid = $(this).data('pid');
-		$.post("/guide-vote", { pid: pid, positive: 0 }).done(function(data) {
-			$('.thanks-response').html(data.message);
-    		$('.thanks-response').show('slow');
-    	});
-	});
-
-	$('.vote-helpful .success, .vote-helpful .error').click(function() {
-		var parent = $(this).parent();
-
-		var pid = parent.data('id');
-		var positive = 1;
-
-		if ($(this).hasClass('error')) {
-			positive = 0;
-		}
-
-		$.post("/editorial-vote", { pid: pid, positive: positive }).done(function(data) {
-			if (data.success) {
-    			parent.html('<div class="success">Thanks for the vote!</div>');
-    		} else {
-    			parent.html('<div>Thanks, your opinion is considered.</div>')
-    		}
-    	});
-	});
-
-	$('#intro-upvote').on('click', function() {
-		var cid = $("#title").data("slug");
-		var type = 'up';
-
-		$.post("/thumps-vote", { cid: cid, type: type }).done(function(data) {
-			if (data.success) {
-				$('#intro-upvote-count').html(parseInt($('#intro-upvote-count').html())+1);
+		
+		$("#votebutton").attr("disabled", true);
+		
+		var sendData = {"poll_id":poll_id,"id":oid};
+		
+		$.ajax({
+			url : "vote",
+			method : "post",
+			data : JSON.stringify(sendData),
+			dataType:"json",
+			contentType : "application/json;charset=UTF-8",
+			success :function(resp){
+				if(resp==1){
+					$('#voteresponse').html(already_voted).addClass("error");
+					return;
+				}else if(resp==2){
+					$('#voteresponse').html(closed_vote).addClass("error");
+					return;
+				}else{
+					displayResults();
+				}
+		
 			}
 		});
 	});
-
-	$('#intro-downvote').on('click', function() {
-		var cid = $("#title").data("slug");
-		var type = 'down';
-
-		$.post("/thumps-vote", { cid: cid, type: type }).done(function(data) {
-			if (data.success) {
-				$('#intro-upvote-count').html(parseInt($('#intro-downvote-count').html())+1);
-			}
-		});
-	});
+		
+	
 });
 
 function SelectText(element) {
@@ -267,101 +187,67 @@ function escapeHtml(unsafe) {
 	});
 }
     
-function refreshResults(rerender) {
-	var pid = $("#pollid").attr("content");
+function refreshResults() {
+	var poll_id = $("#pollid").val();
 
-	var pie_data = [];
-	var pie_colors = [];
+	var pie_colors = ['#3EB991', '#FF7563', '#AA66CC', '#FFBB33', '#FF8800', '#33B5E5', '#AA66CC'];
 
 	$("#refresh").attr("disabled", true);
 
-	$.post("/refresh", { pid: pid }).done(function(poll) {
-		$("#refresh").attr("disabled", false);
-
-		var resultbars_content = '';
-		
-		for (var i = 0; i < poll.data.length; i++) {
-
-			var percent = 0; 
-			if (poll.total_votes > 0) { 
-				percent = Math.round((poll.data[i].votes / poll.total_votes * 100) * 100) / 100;
-			}
-
-			data.labels[i] = poll.data[i].name;
+	var sendData = {"poll_id":poll_id};
+	$.ajax({
+		url : "voteResult",
+		method : "post",
+		data : JSON.stringify(sendData),
+		dataType:"json",
+		contentType : "application/json;charset=UTF-8",
+		success :function(poll){
 			
-			var r = /&#x([\d\w]{1,});/gi;
-			data.labels[i] = data.labels[i].replace(r, function (match, grp) {
-			    return String.fromCharCode(parseInt(grp, 16)); } );
-			data.labels[i] = unescape(data.labels[i]);
-
-			data.labels[i] = htmldecode(data.labels[i]);
-
-			if ($(document).width() > 1000) {
-				if (data.labels[i].length > 11) {
-					data.labels[i] = data.labels[i].substring(0, 11)+'...';
+			var j=0;
+			var resultbars_content ='';
+			for(i in poll.data){
+				if(j>6){
+					j=0;
 				}
-			} else {
-				if (data.labels[i].length > 12) {
-					data.labels[i] = data.labels[i].substring(0, 12)+'...';
+				var percent = 0;
+				if (poll.total_votes > 0) { 
+					percent = Math.round((poll.data[i].vote_count / poll.total_votes * 100) * 100) / 100;
 				}
+				
+				if ($(document).width() > 1000) {
+					if (poll.data[i].item.length > 11) {
+						poll.data[i].item = poll.data[i].item.substring(0, 11)+'...';
+					}
+				} else {
+					if (poll.data[i].item.length > 12) {
+						poll.data[i].item = poll.data[i].item.substring(0, 12)+'...';
+					}
+				}
+				
+				poll.data[i].short_name = poll.data[i].item;
+				
+				if (poll.data[i].short_name.length > 47) {
+					poll.data[i].short_name = poll.data[i].short_name.substring(0, 47)+'...';
+				}
+				
+				resultbars_content += '<li><div class="resultstring clearfix"><span class="float-right font-medium">'+ percent +' % <span class="">('+ poll.data[i].vote_count +' votes)</span></span><span class="float-left" title="'+escapeHtml(poll.data[i].item)+'">'+ escapeHtml(poll.data[i].short_name) +'</span></div>'
+				 +'<div class="resultbar-wrapper"><div class="resultbar" style="width: '+ percent +'%; background-color: '+ pie_colors[i] +';"></div></div></li>';
+				
+				j++;
 			}
-
-			pie_data[i] = poll.data[i].votes;
-			pie_colors[i] = colors[i];
-
-			poll.data[i].short_name = poll.data[i].name;
-
-			if (poll.data[i].short_name.length > 47) {
-				poll.data[i].short_name = poll.data[i].short_name.substring(0, 47)+'...';
-			}
-
-			resultbars_content += '<li><div class="resultstring clearfix"><span class="float-right font-medium">'+ percent +' % <span class="">('+ poll.data[i].votes +' votes)</span></span><span class="float-left" title="'+escapeHtml(poll.data[i].name)+'">'+ escapeHtml(poll.data[i].short_name) +'</span></div>'
-								 +'<div class="resultbar-wrapper"><div class="resultbar" style="width: '+ percent +'%; background-color: '+ pie_colors[i] +';"></div></div></li>';
+			
+			$('#resultbars').html(resultbars_content);
+			$('#total_votes').html(poll.total_votes);
+			
+			
 		}
-
-		$('#resultbars').html(resultbars_content);
-		$('#total_votes').html(poll.total_votes);
-
-		var is_embedded = $('#pollembed').attr("content");
-
-		if (is_embedded == 0) {
-	    	if (rerender) {
-	    		pieChart.destroy();
-
-	    		data.datasets[0].data = pie_data;
-
-	    		pieChart = new Chart(ctx, {
-				    type: 'pie',
-				    data: {
-				    	labels: data.labels,
-				    	datasets: [
-				    		{
-				    			data: pie_data,
-				    			backgroundColor: pie_colors
-				    		}]
-				    },
-				    options: options
-				});
-	    	} else {
-	    		pieChart.data.labels = pie_labels;
-	    		pieChart.data.datasets[0].data = pie_data;
-
-	    		pieChart.update();
-	    	}
-	    }
+		
     });
 }
 
 function displayResults() {
-	var is_embedded = $('#pollembed').attr("content");
 
-	if (is_embedded == 0) {
-		$('#result').fadeIn(1000);
-		$('#comments').fadeIn(1000);
-		$('#feedback').fadeIn(1000);
-	    $('html,body').animate({scrollTop: $("#share").offset().top},'slow');
-	} else {
-		$('#embed-questions').hide();
-		$('#embed-result').fadeIn(1000);
-	}
+	$('#result').fadeIn(1000);
+    $('html,body').animate({scrollTop: $("#share").offset().top},'slow');
+
 }

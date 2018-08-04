@@ -30,6 +30,15 @@ public class PollItemRepository implements PollItemMapper {
 		
 		return mapper.selectItem(poll_id);
 	}
+
+	@Override
+	public int updateItem(PollItem pItem) {
+		
+		PollItemMapper mapper = session.getMapper(PollItemMapper.class);
+		int result = mapper.updateItem(pItem);
+		
+		return result;
+	}
 	
 	
 	

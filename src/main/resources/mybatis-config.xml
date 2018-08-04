@@ -9,12 +9,14 @@
 	<typeAliases>
 		<typeAlias type="com.strawpoll.app.dto.PollInfo" alias="PollInfo" />
 		<typeAlias type="com.strawpoll.app.dto.PollItem" alias="PollItem" />
+		<typeAlias type="com.strawpoll.app.dto.VoteList" alias="VoteList" />
 	</typeAliases>
 	
 	<!-- Mapper 파일 include -->
 	<mappers>
 		<mapper resource="PollMapper.xml" />
 		<mapper resource="PollItemMapper.xml" />
+		<mapper resource="VoteListMapper.xml" />
 	</mappers>
 	
 </configuration>
